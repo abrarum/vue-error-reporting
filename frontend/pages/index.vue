@@ -6,7 +6,7 @@
         <span
           @click="undoAction()"
           :class="[
-            opInProgress == false ? 'hidden' : '',
+            op_progress == false ? 'hidden' : '',
             'px-1.5',
             'flex',
             'justify-center',
@@ -113,7 +113,7 @@
                     is="transition-group"
                   >
                     <tr
-                      :class="{ 'lister-item': isActive }"
+                      :class="{ 'lister-item': row_trans }"
                       v-for="error in filterList"
                       :key="error.index"
                     >
@@ -146,6 +146,7 @@
                         </span>
                       </td>
                       <td :class="[active_nav == 0 ? 'hidden' : '', 'px-1.5']">
+                        
                         <svg
                           v-on:click="updateData(error, c_s[0])"
                           xmlns="http://www.w3.org/2000/svg"
@@ -219,7 +220,7 @@
               @click="
                 isActive = true;
                 active_nav = index;
-                opInProgress = false;
+                op_progress = false;
               "
               class="mr-3 flex-1"
             >
@@ -274,8 +275,8 @@ export default {
     },
 
     updateData: function (error, new_status) {
-      this.opInProgress = true;
-      this.lastAction = [error, new_status];
+      this.op_progress = true;
+      this.last_action = [error, new_status];
 
       console.log("updating data");
       console.log("error, new_status", error, new_status, error.index);
@@ -301,9 +302,9 @@ export default {
     undoAction: function () {
       console.log("inside undoAction");
       // only if the action is performed and the page is not navigated
-      if (this.opInProgress) {
-        let error = this.lastAction[0];
-        let new_status = this.lastAction[1];
+      if (this.op_progress) {
+        let error = this.last_action[0];
+        let new_status = this.last_action[1];
 
         let op = this.c_s.indexOf(new_status);
 
@@ -319,7 +320,7 @@ export default {
             }
           }
         }
-        this.opInProgress = false;
+        this.op_progress = false;
       }
 
       //console.log("error, new_status", error, new_status)
@@ -337,10 +338,10 @@ export default {
     return {
       c_s: ["resolved", "unresolved", "backlog"],
       active_nav: 0,
-      opInProgress: false,
-      lastAction: [],
+      op_progress: false,
+      last_action: [],
       isActive: true,
-      activeState: [],
+      row_trans: true,
       all_data: [],
     };
   },
